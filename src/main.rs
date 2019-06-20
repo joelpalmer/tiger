@@ -17,10 +17,16 @@ fn handle_connection(mut stream: TcpStream) {
 
     stream.read(&mut buffer).unwrap();
 
-    let contents = fs::read_to_string("tiger.html").unwrap();
+    let get = b"GET / HTTP/1.1\r\n";
 
-    let response = format!("HTTP/1/1 200 OK\r\n\r\n{}", contents);
+    if buffer.starts_with(get) {
+        let contents = fs::read_to_string("tiger.html").unwrap();
 
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
+        let response = format!("HTTP/1/1 200 OK\r\n\r\n{}", contents);
+
+        stream.write(response.as_bytes()).unwrap();
+        stream.flush().unwrap();
+    } else {
+
+    }
 }
